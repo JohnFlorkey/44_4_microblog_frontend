@@ -2,13 +2,16 @@ import React from "react";
 import { useParams, useHistory } from "react-router";
 import { Button } from "react-bootstrap";
 import BlogPostForm from "./BlogPostForm";
+import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
 import "./BlogPostDetail.css";
 
 function BlogPostDetail({ blogPosts, stateFunctions }) {
   const history = useHistory();
-  const { deleteBlogPost, editBlogPost } = stateFunctions;
+  const { deleteBlogPost, editBlogPost, addComment, deleteComment } =
+    stateFunctions;
   const { postid } = useParams();
-  const { body, description, title, isEditing } = blogPosts[postid];
+  const { body, description, title, isEditing, comments } = blogPosts[postid];
 
   const handleDelete = (postid) => {
     deleteBlogPost(postid);
@@ -29,15 +32,18 @@ function BlogPostDetail({ blogPosts, stateFunctions }) {
       <h2>{title}</h2>
       <p>{description}</p>
       <p>{body}</p>
-      <Button className="btn-small m-2" onClick={() => handleEdit(postid)}>
+      <Button className="m-2" onClick={() => handleEdit(postid)}>
         Edit
       </Button>
-      <Button
-        className="btn-small m-2 btn-danger"
-        onClick={() => handleDelete(postid)}
-      >
+      <Button className="m-2 btn-danger" onClick={() => handleDelete(postid)}>
         Delete
       </Button>
+      <CommentList
+        blogPostID={postid}
+        comments={comments}
+        deleteComment={deleteComment}
+      />
+      <CommentForm blogPostID={postid} addComment={addComment} />
     </div>
   );
 }

@@ -26,7 +26,39 @@ function useBlogPosts(initialValue) {
     setBlogPosts({ ...newState });
   };
 
-  return [blogPosts, updateBlogPosts, editBlogPost, deleteBlogPost];
+  const addComment = (blogPostID, comment) => {
+    setBlogPosts({
+      ...blogPosts,
+      [blogPostID]: {
+        ...blogPosts[blogPostID],
+        comments: [
+          ...blogPosts[blogPostID].comments,
+          { id: uuid(), comment: comment.comment },
+        ],
+      },
+    });
+  };
+
+  const deleteComment = (blogPostID, commentID) => {
+    setBlogPosts({
+      ...blogPosts,
+      [blogPostID]: {
+        ...blogPosts[blogPostID],
+        comments: blogPosts[blogPostID].comments.filter(
+          (c) => c.id !== commentID
+        ),
+      },
+    });
+  };
+
+  return [
+    blogPosts,
+    updateBlogPosts,
+    editBlogPost,
+    deleteBlogPost,
+    addComment,
+    deleteComment,
+  ];
 }
 
 export default useBlogPosts;

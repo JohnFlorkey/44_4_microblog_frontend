@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { v4 as uuid } from "uuid";
@@ -15,15 +15,24 @@ function Routes() {
       description: "this is just a sample",
       title: "Some Content",
       isEditing: false,
+      comments: [{ id: uuid(), comment: "no comment" }],
     },
   };
-  const [blogPosts, updateBlogPosts, editBlogPost, deleteBlogPost] =
-    useBlogPosts(INITIAL_BLOG_POSTS_STATE);
+  const [
+    blogPosts,
+    updateBlogPosts,
+    editBlogPost,
+    deleteBlogPost,
+    addComment,
+    deleteComment,
+  ] = useBlogPosts(INITIAL_BLOG_POSTS_STATE);
 
   const stateFunctions = {
     updateBlogPosts,
     deleteBlogPost,
     editBlogPost,
+    addComment,
+    deleteComment,
   };
 
   return (

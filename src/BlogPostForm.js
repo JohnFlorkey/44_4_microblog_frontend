@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { Button, Form } from "react-bootstrap";
+import useFormData from "./useFormData";
 
 function BlogPostForm({ blogPost, stateFunctions }) {
   const INITIAL_FORM_STATE = {
@@ -8,6 +9,7 @@ function BlogPostForm({ blogPost, stateFunctions }) {
     description: "",
     body: "",
     isEditing: false,
+    comments: [{}],
   };
 
   const { editBlogPost, updateBlogPosts } = stateFunctions;
@@ -15,15 +17,7 @@ function BlogPostForm({ blogPost, stateFunctions }) {
   const blogPostID = blogPost ? Object.keys(blogPost)[0] : undefined;
   const blogPostData = blogPostID ? blogPost[blogPostID] : INITIAL_FORM_STATE;
 
-  const [formData, setFormData] = useState(blogPostData);
-
-  function handleChange(evt) {
-    const { name, value } = evt.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  }
+  const [formData, updateFormData] = useFormData(blogPostData);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -48,7 +42,7 @@ function BlogPostForm({ blogPost, stateFunctions }) {
           name="title"
           id="title"
           value={formData.title}
-          onChange={handleChange}
+          onChange={updateFormData}
         />
       </Form.Group>
       <Form.Group>
@@ -58,7 +52,7 @@ function BlogPostForm({ blogPost, stateFunctions }) {
           name="description"
           id="description"
           value={formData.description}
-          onChange={handleChange}
+          onChange={updateFormData}
         />
       </Form.Group>
       <Form.Group>
@@ -68,7 +62,7 @@ function BlogPostForm({ blogPost, stateFunctions }) {
           name="body"
           id="body"
           value={formData.body}
-          onChange={handleChange}
+          onChange={updateFormData}
         />
       </Form.Group>
       <Button type="submit" className="btn-primary btn-small m-2">
