@@ -1,49 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router";
 import { Button } from "react-bootstrap";
 import BlogPostForm from "./BlogPostForm";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
+import { actionDeleteBlogPost } from "./actions";
 import "./BlogPostDetail.css";
 
-function BlogPostDetail({ blogPosts, stateFunctions }) {
+function BlogPostDetail() {
+  const dispatch = useDispatch();
   const history = useHistory();
-  const { deleteBlogPost, editBlogPost, addComment, deleteComment } =
-    stateFunctions;
   const { postid } = useParams();
-  const { body, description, title, isEditing, comments } = blogPosts[postid];
+  const blogPosts = useSelector((store) => store);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleDelete = (postid) => {
+  const blogPost = blogPosts[postid];
+  const { body, description, title, comments } = blogPost;
+
+  const deleteBlogPost = () => dispatch(actionDeleteBlogPost(postid));
+
+  const handleDelete = () => {
     deleteBlogPost(postid);
     history.push("/");
   };
 
-  const handleEdit = (postid) => {
-    editBlogPost(postid);
+  const handleEdit = () => {
+    setIsEditing(isEditing ? false : true);
   };
 
   return isEditing ? (
-    <BlogPostForm
-      blogPost={{ [postid]: blogPosts[postid] }}
-      stateFunctions={stateFunctions}
-    />
+    <BlogPostForm blogPostID={postid} blogPostData={blogPost} />
   ) : (
     <div id={postid} className="BlogPostDetail">
       <h2>{title}</h2>
       <p>{description}</p>
       <p>{body}</p>
-      <Button className="m-2" onClick={() => handleEdit(postid)}>
+      <Button className="m-2" onClick={handleEdit}>
         Edit
       </Button>
-      <Button className="m-2 btn-danger" onClick={() => handleDelete(postid)}>
+      <Button className="m-2 btn-danger" onClick={handleDelete}>
         Delete
       </Button>
-      <CommentList
-        blogPostID={postid}
-        comments={comments}
-        deleteComment={deleteComment}
-      />
-      <CommentForm blogPostID={postid} addComment={addComment} />
+      <CommentList blogPostID={postid} comments={comments} />
+      <CommentForm blogPostID={postid} />
     </div>
   );
 }

@@ -1,35 +1,36 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Button, Form } from "react-bootstrap";
 import useFormData from "./useFormData";
+import { actionUpdateBlogPosts } from "./actions";
 
-function BlogPostForm({ blogPost, stateFunctions }) {
+function BlogPostForm({ blogPostID, blogPostData }) {
   const INITIAL_FORM_STATE = {
     title: "",
     description: "",
     body: "",
     isEditing: false,
-    comments: [{}],
+    comments: [],
   };
 
-  const { editBlogPost, updateBlogPosts } = stateFunctions;
+  const dispatch = useDispatch();
   const history = useHistory();
-  const blogPostID = blogPost ? Object.keys(blogPost)[0] : undefined;
-  const blogPostData = blogPostID ? blogPost[blogPostID] : INITIAL_FORM_STATE;
 
-  const [formData, updateFormData] = useFormData(blogPostData);
+  const initialFormData = blogPostData ? blogPostData : INITIAL_FORM_STATE;
+  const [formData, updateFormData] = useFormData(initialFormData);
+
+  const updateBlogPosts = (blogPostID, blogPostData) =>
+    dispatch(actionUpdateBlogPosts(blogPostID, blogPostData));
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(blogPostID);
-    console.log(formData);
     updateBlogPosts(blogPostID, formData);
     history.push("/");
   };
 
   const handleCancel = (evt) => {
     evt.preventDefault();
-    if (blogPostID) editBlogPost(blogPostID);
     history.push("/");
   };
 
@@ -65,7 +66,11 @@ function BlogPostForm({ blogPost, stateFunctions }) {
           onChange={updateFormData}
         />
       </Form.Group>
-      <Button type="submit" className="btn-primary btn-small m-2">
+      <Button
+        type="submit"
+        className="btn-primary btn-small m-2"
+        onClick={handleSubmit}
+      >
         Save
       </Button>
       <Button className="btn-secondary btn-small m-2" onClick={handleCancel}>

@@ -1,9 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Row } from "react-bootstrap";
 import BlogPostCard from "./BlogPostCard";
 
-function BlogPostList({ blogPosts }) {
+function BlogPostList() {
+  const blogPosts = useSelector((store) => store);
   const blogPostData = [];
+
   for (const [key, value] of Object.entries(blogPosts)) {
     blogPostData.push(
       <BlogPostCard

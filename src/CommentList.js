@@ -1,8 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
+import { actionDeleteComment } from "./actions";
 import "./CommentList.css";
 
-function CommentList({ blogPostID, comments, deleteComment }) {
+function CommentList({ blogPostID, comments }) {
+  const dispatch = useDispatch();
+
+  const handleDeleteComment = (blogPostID, commentID) => {
+    dispatch(actionDeleteComment(blogPostID, commentID));
+  };
+
   return (
     <ListGroup variant="flush" className="text-left">
       <hr />
@@ -13,7 +21,7 @@ function CommentList({ blogPostID, comments, deleteComment }) {
           <Button
             type="button"
             className="btn-sm btn-danger m-x-2"
-            onClick={() => deleteComment(blogPostID, c.id)}
+            onClick={() => handleDeleteComment(blogPostID, c.id)}
           >
             X
           </Button>
