@@ -6,4 +6,6 @@ export const DELETE_POST = "deletePost";
 export const DELETE_TITLE = "deleteTitle";
 export const LOAD_TITLES = "loadTitles";
 export const UPDATE_POST = "updatePost";
+export const UPDATE_POST_VOTES = "updatePostVotes";
 export const UPDATE_TITLE = "updateTitle";
+export const UPDATE_TITLE_VOTES = "updateTitleVotes";

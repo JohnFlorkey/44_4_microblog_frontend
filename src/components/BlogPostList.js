@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row } from "react-bootstrap";
 import BlogPostCard from "./BlogPostCard";
-import { getTitlesFromAPI } from "./actions";
+import { getTitlesFromAPI } from "../actions/titleActions";
 
 function BlogPostList() {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ function BlogPostList() {
             description={t.description}
             id={t.id}
             title={t.title}
+            votes={t.votes}
           />
         ))}
       </Row>

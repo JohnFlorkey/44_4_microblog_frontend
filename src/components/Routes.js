@@ -9,7 +9,7 @@ import BlogPostForm from "./BlogPostForm";
 import SiteNav from "./SiteNav";
 import BlogPostList from "./BlogPostList";
 import BlogPostDetail from "./BlogPostDetail";
-import rootReducer from "./reducers/rootReducer";
+import rootReducer from "../reducers/rootReducer";
 
 function Routes() {
   const store = createStore(

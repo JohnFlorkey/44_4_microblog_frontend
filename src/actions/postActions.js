@@ -1,15 +1,17 @@
 import axios from "axios";
-
+import {
+  addTitle,
+  deleteTitle,
+  updateTitle,
+  updateTitleVotes,
+} from "./titleActions";
 import {
   ADD_COMMENT,
   ADD_POST,
-  ADD_TITLE,
   DELETE_COMMENT,
   DELETE_POST,
-  DELETE_TITLE,
-  LOAD_TITLES,
   UPDATE_POST,
-  UPDATE_TITLE,
+  UPDATE_POST_VOTES,
 } from "./actionTypes";
 
 export function addComment(postID, comment) {
@@ -28,10 +30,6 @@ export function addCommentToAPI(postID, comment) {
 
 export function addPost(id, postData) {
   return { type: ADD_POST, payload: { id, postData } };
-}
-
-export function addTitle(id, title, description, body) {
-  return { type: ADD_TITLE, payload: { id, title, description, body } };
 }
 
 export function deleteComment(postID, commentID) {
@@ -59,21 +57,10 @@ export function deletePostFromAPI(id) {
   };
 }
 
-export function deleteTitle(id) {
-  return { type: DELETE_TITLE, payload: id };
-}
-
 export function getPostFromAPI(id) {
   return async function (dispatch) {
     const response = await axios.get(`http://localhost:5000/api/posts/${id}`);
     dispatch(addPost(id, response.data));
-  };
-}
-
-export function getTitlesFromAPI() {
-  return async function (dispatch) {
-    const response = await axios.get("http://localhost:5000/api/posts");
-    dispatch(loadTitles(response.data));
   };
 }
 
@@ -86,12 +73,8 @@ export function insertPostToAPI(title, description, body) {
     });
     const res = response.data;
     dispatch(addPost(res.id, { ...res, comments: [] }));
-    dispatch(addTitle(res.id, res.title, res.description, res.body));
+    dispatch(addTitle(res.id, res.title, res.description, res.body, res.votes));
   };
-}
-
-export function loadTitles(titles) {
-  return { type: LOAD_TITLES, payload: titles };
 }
 
 export function updatePost(id, title, description, body) {
@@ -105,12 +88,22 @@ export function updatePostToAPI(id, newTitle, newDescription, newBody) {
       description: newDescription,
       body: newBody,
     });
-    const { title, description, body } = response.data;
+    const { title, description, body, votes } = response.data;
     dispatch(updatePost(id, title, description, body));
-    dispatch(updateTitle(id, title, description, body));
+    dispatch(updateTitle(id, title, description, votes));
   };
 }
 
-export function updateTitle(id, title, description) {
-  return { type: UPDATE_TITLE, payload: { id, title, description } };
+export function updatePostVotes(id, votes) {
+  return { type: UPDATE_POST_VOTES, payload: { id, votes } };
+}
+
+export function voteToAPI(id, direction) {
+  return async function (dispatch) {
+    const response = await axios.post(
+      `http://localhost:5000/api/posts/${id}/vote/${direction}`
+    );
+    dispatch(updatePostVotes(id, response.data.votes));
+    dispatch(updateTitleVotes(id, response.data.votes));
+  };
 }

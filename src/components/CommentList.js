@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
-import { deleteCommentFromAPI } from "./actions";
+import { deleteCommentFromAPI } from "../actions/postActions";
 import "./CommentList.css";
 
 function CommentList({ blogPostID, comments }) {

@@ -2,15 +2,15 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { Form, Button } from "react-bootstrap";
-import useFormData from "./useFormData";
-import { addCommentToAPI } from "./actions";
+import useFormData from "../useFormData";
+import { addCommentToAPI } from "../actions/postActions";
 import "./CommentForm.css";
 
 function CommentForm({ blogPostID }) {
-  const INTIIAL_FORM_STATE = { comment: "" };
   const dispatch = useDispatch();
   const { postid } = useParams();
 
+  const INTIIAL_FORM_STATE = { comment: "" };
   const [formData, updateFormData, clearFormData] =
     useFormData(INTIIAL_FORM_STATE);
 

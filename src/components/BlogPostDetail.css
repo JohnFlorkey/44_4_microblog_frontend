@@ -1,3 +1,6 @@
 .BlogPostDetail {
 	text-align: center;
 }
+.vote {
+	cursor: pointer;
+}

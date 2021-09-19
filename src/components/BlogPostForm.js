@@ -2,8 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { Button, Form } from "react-bootstrap";
-import useFormData from "./useFormData";
-import { insertPostToAPI, updatePostToAPI } from "./actions";
+import useFormData from "../useFormData";
+import { insertPostToAPI, updatePostToAPI } from "../actions/postActions";
 
 function BlogPostForm({ blogPostID, blogPostData }) {
   const INITIAL_FORM_STATE = {
@@ -12,36 +12,35 @@ function BlogPostForm({ blogPostID, blogPostData }) {
     body: "",
     isEditing: false,
     comments: [],
+    votes: 0,
   };
 
   const dispatch = useDispatch();
   const history = useHistory();
   const { postid } = useParams();
+  const id = parseInt(postid);
 
   const initialFormData = blogPostData ? blogPostData : INITIAL_FORM_STATE;
   const [formData, updateFormData] = useFormData(initialFormData);
 
-  const handleSubmit = (evt) => {
+  const handleCancel = (evt) => {
     evt.preventDefault();
-    if (postid) {
-      dispatch(
-        updatePostToAPI(
-          postid,
-          formData.title,
-          formData.description,
-          formData.body
-        )
-      );
-    } else {
-      dispatch(
-        insertPostToAPI(formData.title, formData.description, formData.body)
-      );
-    }
     history.push("/");
   };
 
-  const handleCancel = (evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
+    if (id) {
+      // if we have a id this is an update, so call the update thunk
+      dispatch(
+        updatePostToAPI(id, formData.title, formData.description, formData.body)
+      );
+    } else {
+      dispatch(
+        // if no id this is a new post, so call the insert thunk
+        insertPostToAPI(formData.title, formData.description, formData.body)
+      );
+    }
     history.push("/");
   };
 

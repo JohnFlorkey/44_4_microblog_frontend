@@ -4,7 +4,8 @@ import {
   DELETE_COMMENT,
   DELETE_POST,
   UPDATE_POST,
-} from "../actionTypes";
+  UPDATE_POST_VOTES,
+} from "../actions/actionTypes";
 
 const INITIAL_STATE = {};
 
@@ -45,6 +46,11 @@ function postReducer(state = INITIAL_STATE, action) {
     case UPDATE_POST: {
       const { id, title, description, body } = action.payload;
       return { ...state, [id]: { ...state[id], title, description, body } };
+    }
+
+    case UPDATE_POST_VOTES: {
+      const { id, votes } = action.payload;
+      return { ...state, [id]: { ...state[id], votes } };
     }
 
     default:
