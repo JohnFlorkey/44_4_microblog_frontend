@@ -2,17 +2,19 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import BlogPostForm from "./BlogPostForm";
 import SiteNav from "./SiteNav";
 import BlogPostList from "./BlogPostList";
 import BlogPostDetail from "./BlogPostDetail";
-import blogPostReducer from "./blogPostReducer";
+import rootReducer from "./reducers/rootReducer";
 
 function Routes() {
   const store = createStore(
-    blogPostReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    rootReducer,
+    composeWithDevTools(applyMiddleware(thunk))
   );
 
   return (

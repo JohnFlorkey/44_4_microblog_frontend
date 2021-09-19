@@ -1,23 +1,22 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router";
 import { Form, Button } from "react-bootstrap";
 import useFormData from "./useFormData";
-import { actionAddComment } from "./actions";
+import { addCommentToAPI } from "./actions";
 import "./CommentForm.css";
 
 function CommentForm({ blogPostID }) {
   const INTIIAL_FORM_STATE = { comment: "" };
   const dispatch = useDispatch();
+  const { postid } = useParams();
 
   const [formData, updateFormData, clearFormData] =
     useFormData(INTIIAL_FORM_STATE);
 
-  const addComment = () =>
-    dispatch(actionAddComment(blogPostID, formData.comment));
-
   function handleSubmit(evt) {
     evt.preventDefault();
-    addComment();
+    dispatch(addCommentToAPI(postid, formData.comment));
     clearFormData();
   }
 

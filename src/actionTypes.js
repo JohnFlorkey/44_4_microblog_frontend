@@ -1,4 +1,9 @@
-export const UPDATE_BLOG_POSTS = "updateBlogPosts";
-export const DELETE_BLOG_POST = "deleteBlogPost";
 export const ADD_COMMENT = "addComment";
+export const ADD_POST = "addPost";
+export const ADD_TITLE = "addTitle";
 export const DELETE_COMMENT = "deleteComment";
+export const DELETE_POST = "deletePost";
+export const DELETE_TITLE = "deleteTitle";
+export const LOAD_TITLES = "loadTitles";
+export const UPDATE_POST = "updatePost";
+export const UPDATE_TITLE = "updateTitle";

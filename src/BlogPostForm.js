@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Button, Form } from "react-bootstrap";
 import useFormData from "./useFormData";
-import { actionUpdateBlogPosts } from "./actions";
+import { insertPostToAPI, updatePostToAPI } from "./actions";
 
 function BlogPostForm({ blogPostID, blogPostData }) {
   const INITIAL_FORM_STATE = {
@@ -16,16 +16,27 @@ function BlogPostForm({ blogPostID, blogPostData }) {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const { postid } = useParams();
 
   const initialFormData = blogPostData ? blogPostData : INITIAL_FORM_STATE;
   const [formData, updateFormData] = useFormData(initialFormData);
 
-  const updateBlogPosts = (blogPostID, blogPostData) =>
-    dispatch(actionUpdateBlogPosts(blogPostID, blogPostData));
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    updateBlogPosts(blogPostID, formData);
+    if (postid) {
+      dispatch(
+        updatePostToAPI(
+          postid,
+          formData.title,
+          formData.description,
+          formData.body
+        )
+      );
+    } else {
+      dispatch(
+        insertPostToAPI(formData.title, formData.description, formData.body)
+      );
+    }
     history.push("/");
   };
 
